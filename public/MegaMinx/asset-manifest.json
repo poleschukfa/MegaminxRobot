@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/MegaMinx/static/css/main.f0abf994.css",
+    "main.js": "/MegaMinx/static/js/main.d22a513d.js",
+    "static/js/453.023eb75f.chunk.js": "/MegaMinx/static/js/453.023eb75f.chunk.js",
+    "service-worker.js": "/MegaMinx/service-worker.js",
+    "index.html": "/MegaMinx/index.html",
+    "main.f0abf994.css.map": "/MegaMinx/static/css/main.f0abf994.css.map",
+    "main.d22a513d.js.map": "/MegaMinx/static/js/main.d22a513d.js.map",
+    "453.023eb75f.chunk.js.map": "/MegaMinx/static/js/453.023eb75f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0abf994.css",
+    "static/js/main.d22a513d.js"
+  ]
+}

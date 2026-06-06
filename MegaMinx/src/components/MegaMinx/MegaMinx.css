@@ -1,0 +1,19 @@
+:root {
+    --bg-1: #0f172a;
+    --bg-2: #1e293b;
+    --text: #f8fafc;
+}
+
+.canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-position: 50%;
+    background-size: cover;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.16), transparent 30%),
+        radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.12), transparent 30%),
+        linear-gradient(140deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    color: var(--text);
+}

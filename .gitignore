@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+MegaMinx/node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv*/
+venv/
+
+# Build (simulator output is synced to public/MegaMinx/)
+MegaMinx/build/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+!robot/.env.example
+data/users.json
+data/daily_*.json
+
+# IDE / local
+.cursor/
+.DS_Store
+*.log

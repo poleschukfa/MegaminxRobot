@@ -1,0 +1,124 @@
+.color-menu-container{
+    max-width: 320px;
+    height: 29vh;
+    
+    margin: auto;
+    margin-bottom: 4px;
+    /* border: 2px solid blue;
+    border-radius: .25rem; */
+}
+
+.color-menu{
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.color-options{
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.holder-text{
+    visibility: hidden;
+}
+
+.color-button{
+    text-align: center;
+    vertical-align: middle;
+    line-height: 5.5vh;
+    margin: 2px;
+    border-radius: .5rem;
+
+    transition: opacity .4s ease;
+    pointer-events: auto;
+}
+
+.color-button:hover{
+    opacity: .8;
+    cursor: pointer;
+}
+
+.color-button:active{
+    opacity: .6;
+}
+
+.option-button{
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 5vh;
+    margin: 2px;
+    border: 2px solid lightgray;
+    pointer-events: auto;
+    border-radius: .25rem;
+    background-color: rgba(211,211,211,.1);
+    transition: background-color .4s ease;
+}
+
+.option-button:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 255,.5);
+}
+
+
+.color-exit{
+    color: lightgray;
+    background-color: rgba(0, 0, 0,.2);
+}
+
+.color-check{
+    color: rgb(0, 102, 255);
+    transition: color .4s ease;
+}
+
+.color-check:hover{
+    color: lightgray;
+}
+
+.Solve{
+    color: rgb(0, 201, 0);
+    background-color: rgba(0, 0, 0,.2);
+}
+.Solve:hover{
+    color: rgb(0, 201, 0);
+    background-color: rgba(0, 128, 0,.2);
+}
+
+.Invalid{
+    color: red;
+    background-color: rgba(0, 0, 0,.2);
+}
+.Invalid:hover{
+    color: red;
+    background-color: rgba(0, 0, 0,.2);
+    cursor: default;
+}
+.blackdot{
+    height: 15px;
+    width: 15px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    margin-top: -30px;
+    margin-left: 40px;
+}
+
+.cp-info-panel{
+    position: fixed;
+    color: lightgray;
+    right: 10px;
+    top: 85px;
+    text-align: left;
+}
+.cp-info-data{
+    width: 40px;
+    height: 1.5rem;
+    border-radius: .25rem;
+    margin-left: 8px;
+}
+
+.embed-color-picker .color-menu-container{
+    max-width: min(100%, 360px);
+}

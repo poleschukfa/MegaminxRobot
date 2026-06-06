@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Благодарность партнеру | Roborubiks</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #264081;
+            --accent-soft: #e8eefb;
+            --border: #dbe5f4;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 50%, #eef2f7 100%);
+        }
+
+        .wrap {
+            max-width: 860px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(1.4rem, 3.2vw, 2rem);
+            line-height: 1.2;
+        }
+
+        .lead {
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .highlight {
+            margin: 18px 0;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: var(--accent-soft);
+            border: 1px solid #cedcf8;
+            font-weight: 600;
+        }
+
+        ul {
+            margin: 12px 0 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fff;
+        }
+
+        .btn-primary {
+            border-color: #3258ab;
+            background: var(--accent);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <main class="wrap">
+        <section class="card">
+            <h1>Спасибо Фонду целевого капитала МФТИ за поддержку проекта</h1>
+            <p class="lead">
+                Мы благодарим Фонд целевого капитала МФТИ за вклад в развитие проекта
+                «Создание робота для сборки головоломки Мегаминкс, проведение соревнований и хакатона по разработке самого быстрого алгоритма по сборке».
+            </p>
+
+            <div class="highlight">
+                В 2025 году проект получил поддержку
+                в размере 3,68 млн рублей в рамках конкурса «Обратная перспектива».
+            </div>
+
+            <p class="lead">
+                Эта поддержка позволяет:
+            </p>
+            <ul>
+                <li>развивать робототехническую платформу и симулятор для участников;</li>
+                <li>проводить соревнования и тестировать новые алгоритмы сборки;</li>
+                <li>популяризировать исследования на стыке робототехники, математики и программирования.</li>
+            </ul>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="https://fund.mipt.ru/" target="_blank" rel="noopener noreferrer">
+                    Фонд целевого капитала МФТИ
+                </a>
+                <a class="btn" href="/viewer.html">Вернуться к трансляции</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

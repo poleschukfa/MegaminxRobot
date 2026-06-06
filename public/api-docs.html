@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Megaminx API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+        .container {
+            max-width: 720px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .auth-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .auth-box h2 {
+            font-size: 16px;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        .auth-box ol {
+            margin: 0 0 12px 1.2rem;
+            color: #444;
+            font-size: 14px;
+        }
+        .auth-box li { margin-bottom: 6px; }
+        .auth-box code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+        a {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .primary {
+            background: #3498db;
+            color: white;
+        }
+        .secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+        .colab-open {
+            background: transparent;
+            padding: 8px 0;
+        }
+        .colab-open img {
+            display: block;
+            height: 32px;
+            width: auto;
+        }
+        .hint {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+        }
+        .status {
+            display: block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            text-align: center;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .online { background: #d5f5e3; color: #1e8449; }
+        .offline { background: #fadbd8; color: #922b21; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Megaminx API</h1>
+        <p style="text-align:center">
+            Документация и примеры HTTP-методов — в Jupyter notebook
+            с клиентом <code>megaminx_client.py</code>.
+        </p>
+
+        <div class="auth-box">
+            <h2>🔐 Авторизация</h2>
+            <p style="margin-bottom:10px;font-size:14px">
+                Если на сервере включена авторизация, передавайте заголовок
+                <code>Authorization: Bearer &lt;token&gt;</code> для запросов к <code>/api/*</code>.
+            </p>
+            <ol>
+                <li><strong>Токен из viewer</strong> — войдите на <a href="/viewer.html">viewer</a>, откройте вкладку <strong>API</strong> в пульте и скопируйте «Токен для API».</li>
+                <li><strong>Логин через API</strong> — <code>POST /api/auth/login</code> с <code>username</code> и <code>password</code> → поле <code>token</code> в ответе.</li>
+                <li><strong>API_SECRET</strong> — серверный секрет из <code>.env</code> (для админ-скриптов).</li>
+            </ol>
+            <p style="font-size:13px;color:#64748b;margin:0">
+                Команды робота работают только если вы <strong>активный зритель</strong> в очереди viewer.
+            </p>
+            <pre>api = MegaminxClient("https://roborubiks.ru", api_token="ВАШ_ТОКЕН")</pre>
+        </div>
+
+        <div class="links">
+            <a class="primary colab-open" href="https://colab.research.google.com/github/poleschukfa/MegaminxRobot/blob/main/notebooks/megaminx_api.ipynb" target="_blank" rel="noopener noreferrer" title="Открыть в Google Colab">
+                <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" width="140" height="32">
+            </a>
+            <a class="primary" href="/notebooks/view.html">
+                Документация API
+            </a>
+            <a class="secondary" href="/viewer.html">
+                Viewer (скопировать токен)
+            </a>
+            <a class="secondary" href="/notebooks/megaminx_api.ipynb" download>
+                Jupyter notebook (.ipynb)
+            </a>
+            <a class="secondary" href="/notebooks/megaminx_client.py" download>
+                megaminx_client.py
+            </a>
+        </div>
+        <p class="hint">Пошаговый гайд с примерами кода и оглавлением — в документации в браузере.</p>
+        <div id="apiStatus" class="status offline">Проверка стримера…</div>
+    </div>
+
+    <script>
+        async function checkApiStatus() {
+            const el = document.getElementById('apiStatus');
+            try {
+                const data = await fetch('/health').then(r => r.json());
+                if (data.broadcaster) {
+                    el.textContent = 'Стример онлайн';
+                    el.className = 'status online';
+                } else {
+                    el.textContent = 'Стример офлайн';
+                    el.className = 'status offline';
+                }
+            } catch {
+                el.textContent = 'Сервер недоступен';
+                el.className = 'status offline';
+            }
+        }
+        checkApiStatus();
+        setInterval(checkApiStatus, 10000);
+    </script>
+</body>
+</html>

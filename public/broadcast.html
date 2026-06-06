@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Панель стримера | Roborubiks</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-a: #0b1020;
+            --bg-b: #1f2937;
+            --panel: rgba(255,255,255,0.96);
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --text: #111827;
+            --muted: #6b7280;
+            --radius-lg: 16px;
+            --shadow-main: 0 24px 60px rgba(2,6,23,0.35);
+        }
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15), transparent 30%),
+                radial-gradient(circle at 90% 0%, rgba(239, 68, 68, 0.12), transparent 35%),
+                linear-gradient(140deg, var(--bg-a) 0%, var(--bg-b) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: var(--panel);
+            border-radius: 22px;
+            box-shadow: var(--shadow-main);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.55);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .subtitle {
+            color: var(--muted);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .secret-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        .secret-field input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-weight: bold;
+            width: 100%;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 10px 24px rgba(37,99,235,0.28);
+        }
+        .btn-start:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(37,99,235,0.34);
+        }
+        .btn-stop {
+            background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
+            color: white;
+        }
+        .btn-stop:hover:not(:disabled) {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 28px rgba(15,23,42,0.28);
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(15,23,42,0.72);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 999px;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .status {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            font-family: monospace;
+            color: #495057;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .commands-panel {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(15,23,42,0.25);
+        }
+        .commands-title {
+            color: white;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .command-log {
+            background: #0b1220;
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #ecf0f1;
+            border: 1px solid #334155;
+        }
+        .command-entry {
+            padding: 3px 0;
+            border-bottom: 1px solid #34495e;
+        }
+        .command-time {
+            color: #7f8c8d;
+        }
+        .command-text {
+            color: #3498db;
+            font-weight: bold;
+        }
+        .command-response {
+            color: #2ecc71;
+            margin-left: 20px;
+        }
+        .info-box {
+            background: linear-gradient(180deg, #eff6ff 0%, #eef2ff 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .info-box a {
+            color: #1d4ed8;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .python-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .python-connected {
+            background: #27ae60;
+            color: white;
+        }
+        .python-disconnected {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span>Панель стримера</span>
+            <span id="pythonStatus" class="python-status python-disconnected">Python: отключен</span>
+        </h1>
+        <div class="subtitle">Roborubiks WebRTC Broadcast</div>
+
+        <div class="info-box">
+            <strong>Ссылка для зрителей:</strong><br>
+            <a href="/viewer.html" target="_blank" id="viewerLink">https://roborubiks.ru/viewer.html</a>
+        </div>
+
+        <div class="controls">
+            <label class="secret-field" for="broadcasterSecret">
+                <span>Ключ стримера</span>
+                <input type="password" id="broadcasterSecret" autocomplete="off" placeholder="BROADCASTER_SECRET">
+            </label>
+            <button class="btn-start" id="startBtn">Начать трансляцию (без звука)</button>
+            <button class="btn-stop" id="stopBtn" style="display: none;">Остановить трансляцию</button>
+        </div>
+
+        <div class="video-container">
+            <span class="video-label">Ваша камера</span>
+            <video id="localVideo" autoplay muted playsinline></video>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="viewerCount">0</div>
+                <div class="stat-label">Активных зрителей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="queueLength">0</div>
+                <div class="stat-label">В очереди</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="connectionState">—</div>
+                <div class="stat-label">Статус</div>
+            </div>
+        </div>
+
+        <div class="commands-panel">
+            <div class="commands-title">Команды и ответы:</div>
+            <div class="command-log" id="commandLog">
+                <div class="command-entry">Ожидание команд...</div>
+            </div>
+        </div>
+
+        <div class="status" id="status">Готов к работе</div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const broadcasterSecretInput = document.getElementById('broadcasterSecret');
+
+        function getBroadcasterSecret() {
+            return broadcasterSecretInput?.value?.trim() || '';
+        }
+
+        const socket = io({ auth: { broadcasterSecret: getBroadcasterSecret() } });
+        const localVideo = document.getElementById('localVideo');
+        const statusDiv = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const viewerCountEl = document.getElementById('viewerCount');
+        const queueLengthEl = document.getElementById('queueLength');
+        const connectionStateEl = document.getElementById('connectionState');
+        const commandLog = document.getElementById('commandLog');
+        const pythonStatus = document.getElementById('pythonStatus');
+
+        let localStream = null;
+        let peerConnection = null;
+        let isStreaming = false;
+        let activeViewerId = null;
+        let pythonWs = null;
+
+        let rtcConfiguration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+        async function loadIceConfiguration() {
+            try {
+                const response = await fetch('/api/webrtc/ice');
+                if (!response.ok) return;
+                const data = await response.json();
+                if (data?.iceServers?.length) {
+                    rtcConfiguration = { iceServers: data.iceServers };
+                }
+            } catch (err) {
+                console.warn('ICE config unavailable, STUN only', err);
+            }
+        }
+
+        loadIceConfiguration();
+
+        function setStatus(text, isError = false) {
+            statusDiv.innerText = text;
+            statusDiv.style.color = isError ? '#e74c3c' : '#495057';
+            console.log(`[Broadcaster] ${text}`);
+        }
+
+        function addCommandToLog(message, type = 'command') {
+            const time = new Date().toLocaleTimeString('ru-RU');
+            const entry = document.createElement('div');
+            entry.className = 'command-entry';
+            
+            if (type === 'command') {
+                entry.innerHTML = `<span class="command-time">[${time}]</span> <span class="command-text">${message}</span>`;
+            } else if (type === 'response') {
+                entry.innerHTML = `<span class="command-time">[${time}]</span> <span class="command-response">${message}</span>`;
+            } else if (type === 'error') {
+                entry.innerHTML = `<span class="command-time">[${time}]</span> <span style="color: #e74c3c;">${message}</span>`;
+            } else {
+                entry.innerHTML = `<span class="command-time">[${time}]</span> <span style="color: #95a5a6;">${message}</span>`;
+            }
+            
+            commandLog.appendChild(entry);
+            commandLog.scrollTop = commandLog.scrollHeight;
+            
+            if (commandLog.children.length > 30) {
+                commandLog.removeChild(commandLog.children[1]);
+            }
+        }
+
+        function updateConnectionState(state) {
+            const states = {
+                'new': 'Новое',
+                'connecting': 'Подключение',
+                'connected': 'Активно',
+                'disconnected': 'Отключено',
+                'failed': 'Ошибка',
+                'closed': 'Закрыто'
+            };
+            connectionStateEl.innerText = states[state] || '—';
+        }
+
+        function updatePythonStatus(connected) {
+            if (connected) {
+                pythonStatus.textContent = 'Python: подключен';
+                pythonStatus.className = 'python-status python-connected';
+            } else {
+                pythonStatus.textContent = 'Python: отключен';
+                pythonStatus.className = 'python-status python-disconnected';
+            }
+        }
+
+        function connectToPythonServer() {
+            try {
+                pythonWs = new WebSocket('ws://localhost:8765');
+                
+                pythonWs.onopen = () => {
+                    console.log('Подключено к Python серверу');
+                    addCommandToLog('Python сервер подключен', 'response');
+                    updatePythonStatus(true);
+                };
+                
+                pythonWs.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log('Ответ от Python:', data);
+                        
+                        // Формируем читаемое сообщение для лога
+                        let responseText = '';
+                        if (data.type === 'welcome') {
+                            responseText = `Python: ${data.message}`;
+                        } else if (data.status === 'ok') {
+                            if (data.move) {
+                                responseText = `Python: ${data.move.notation} (${data.move.face})`;
+                            } else if (data.state) {
+                                responseText = `Python: состояние - ходов ${data.state.history_length}`;
+                            } else if (data.path) {
+                                responseText = `Python: путь ${data.path}`;
+                            } else if (data.message) {
+                                responseText = `Python: ${data.message}`;
+                            } else {
+                                responseText = `Python: команда выполнена`;
+                            }
+                        } else {
+                            responseText = `Python: ${data.message || 'неизвестный ответ'}`;
+                        }
+                        
+                        addCommandToLog(responseText, 'response');
+                        
+                        // ВАЖНО: Пробрасываем ответ от Python зрителю через Node.js сервер
+                        socket.emit('command_response', data);
+                        
+                    } catch (err) {
+                        console.error('Ошибка парсинга ответа от Python:', err);
+                        addCommandToLog(`Ошибка парсинга: ${event.data}`, 'error');
+                    }
+                };
+                
+                pythonWs.onerror = (error) => {
+                    console.error('Ошибка WebSocket к Python:', error);
+                    addCommandToLog('Ошибка соединения с Python сервером', 'error');
+                    updatePythonStatus(false);
+                };
+                
+                pythonWs.onclose = () => {
+                    console.log('Отключено от Python сервера');
+                    addCommandToLog('Python сервер отключен', 'error');
+                    updatePythonStatus(false);
+                    
+                    // Пытаемся переподключиться через 5 секунд
+                    setTimeout(connectToPythonServer, 5000);
+                };
+            } catch (err) {
+                console.log('Python сервер не запущен');
+                addCommandToLog('Python сервер не запущен (ожидание...)', 'error');
+                setTimeout(connectToPythonServer, 5000);
+            }
+        }
+
+        function createPeerConnection() {
+            const pc = new RTCPeerConnection(rtcConfiguration);
+            
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    socket.emit('ice-candidate', event.candidate);
+                }
+            };
+
+            pc.oniceconnectionstatechange = () => {
+                console.log('ICE state:', pc.iceConnectionState);
+            };
+
+            pc.onconnectionstatechange = () => {
+                console.log('Connection state:', pc.connectionState);
+                updateConnectionState(pc.connectionState);
+                
+                if (pc.connectionState === 'connected') {
+                    setStatus('Зритель подключен');
+                } else if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+                    setStatus('Зритель отключился');
+                    viewerCountEl.innerText = '0';
+                }
+            };
+
+            return pc;
+        }
+
+        async function startStreaming() {
+            try {
+                setStatus('Запрос доступа к камере...');
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }, 
+                    audio: false
+                });
+                
+                localVideo.srcObject = localStream;
+                const secret = getBroadcasterSecret();
+                socket.auth = { broadcasterSecret: secret };
+                socket.emit('register as broadcaster', secret ? { secret } : {});
+                
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'block';
+                isStreaming = true;
+                
+                setStatus('Ожидание зрителей...');
+                addCommandToLog('Трансляция запущена (без звука)', 'info');
+                
+                // Подключаемся к Python серверу
+                connectToPythonServer();
+            } catch (err) {
+                console.error('Ошибка доступа к камере:', err);
+                setStatus('Нет доступа к камере', true);
+            }
+        }
+
+        function stopStreaming() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localVideo.srcObject = null;
+            }
+            
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            
+            if (pythonWs) {
+                pythonWs.close();
+                pythonWs = null;
+            }
+            
+            socket.disconnect();
+            setTimeout(() => socket.connect(), 100);
+            
+            startBtn.style.display = 'block';
+            stopBtn.style.display = 'none';
+            isStreaming = false;
+            activeViewerId = null;
+            viewerCountEl.innerText = '0';
+            queueLengthEl.innerText = '0';
+            updateConnectionState('closed');
+            updatePythonStatus(false);
+            setStatus('Трансляция остановлена');
+            addCommandToLog('Трансляция остановлена', 'info');
+        }
+
+        startBtn.onclick = startStreaming;
+        stopBtn.onclick = stopStreaming;
+
+        socket.on('registered as broadcaster', () => {
+            setStatus('Стример зарегистрирован. Зрители могут подключаться.');
+        });
+
+        socket.on('viewer connected', (viewerId) => {
+            setStatus(`Подключается зритель...`);
+            activeViewerId = viewerId;
+            viewerCountEl.innerText = '1';
+            addCommandToLog(`Подключился зритель ${viewerId.slice(0,8)}`, 'info');
+            
+            if (peerConnection) {
+                peerConnection.close();
+            }
+            
+            peerConnection = createPeerConnection();
+            
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
+
+            peerConnection.createOffer()
+                .then(offer => peerConnection.setLocalDescription(offer))
+                .then(() => {
+                    socket.emit('offer', peerConnection.localDescription);
+                    setStatus('Отправлено предложение зрителю');
+                })
+                .catch(err => {
+                    console.error('Ошибка создания offer:', err);
+                    setStatus('Ошибка создания предложения', true);
+                });
+        });
+
+        socket.on('answer', (answer) => {
+            if (peerConnection) {
+                peerConnection.setRemoteDescription(new RTCSessionDescription(answer))
+                    .then(() => {
+                        setStatus('Получен ответ от зрителя');
+                    })
+                    .catch(e => console.error('Ошибка установки remote description:', e));
+            }
+        });
+
+        socket.on('ice-candidate', (candidate) => {
+            if (peerConnection) {
+                peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+                    .catch(e => console.error('Ошибка добавления ICE:', e));
+            }
+        });
+
+        // Приём команд от зрителя (через Node.js сервер)
+        socket.on('command', (data) => {
+            console.log('Получена команда от зрителя:', data);
+            
+            let commandText = `Зритель: ${data.command}`;
+            if (data.params && Object.keys(data.params).length > 0) {
+                commandText += ` (${JSON.stringify(data.params)})`;
+            }
+            addCommandToLog(commandText, 'command');
+            
+            // Пересылаем команду Python серверу
+            if (pythonWs && pythonWs.readyState === WebSocket.OPEN) {
+                pythonWs.send(JSON.stringify(data));
+                addCommandToLog(`Отправлено в Python: ${data.command}`, 'info');
+            } else {
+                addCommandToLog('Python сервер недоступен!', 'error');
+                // Отправляем ошибку обратно зрителю
+                socket.emit('command_response', {
+                    status: 'error',
+                    message: 'Python сервер недоступен'
+                });
+            }
+        });
+
+        // Периодически запрашиваем статистику
+        setInterval(() => {
+            fetch('/health')
+                .then(r => r.json())
+                .then(data => {
+                    queueLengthEl.innerText = data.queueLength;
+                    if (!activeViewerId) {
+                        viewerCountEl.innerText = data.activeViewer ? '1' : '0';
+                    }
+                })
+                .catch(() => {});
+        }, 2000);
+    </script>
+</body>
+</html>

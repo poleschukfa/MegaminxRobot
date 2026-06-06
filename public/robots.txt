@@ -1,0 +1,8 @@
+# https://roborubiks.ru — публичные страницы индексируются, панели управления — нет.
+User-agent: *
+Allow: /
+
+Disallow: /viewer.html
+Disallow: /viewer
+Disallow: /broadcast.html
+Disallow: /broadcast

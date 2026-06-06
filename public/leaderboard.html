@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Таблица лидеров | Roborubiks</title>
+    <link rel="stylesheet" href="/leaderboard.css">
+</head>
+<body class="leaderboard-page">
+    <div class="lang-switcher" id="langSwitcher" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="true">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+
+    <main class="leaderboard-shell">
+        <article class="leaderboard-card">
+            <header class="leaderboard-hero">
+                <p class="leaderboard-badge">Roborubiks · Daily</p>
+                <h1 class="leaderboard-title" data-i18n="leaderboardTitle">Таблица лидеров — дейли-челлендж</h1>
+                <p class="leaderboard-lead" data-i18n="leaderboardLead">
+                    Кто быстрее собрал сегодняшний scramble. Время — от показа пути до успешной сборки.
+                </p>
+            </header>
+
+            <div class="leaderboard-toolbar">
+                <label class="leaderboard-date-label" for="dateSelect" data-i18n="leaderboardDate">Дата</label>
+                <select class="leaderboard-date-select" id="dateSelect" aria-label="Date"></select>
+            </div>
+
+            <div class="leaderboard-table-wrap">
+                <table class="leaderboard-table" id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-i18n="leaderboardRank">#</th>
+                            <th scope="col" data-i18n="leaderboardUser">Игрок</th>
+                            <th scope="col" data-i18n="leaderboardTime">Время</th>
+                            <th scope="col" data-i18n="leaderboardMoves">Ходов</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr>
+                            <td colspan="4" class="leaderboard-empty" data-i18n="leaderboardLoading">Загрузка…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="leaderboard-nav">
+                <a href="/viewer.html" data-i18n="leaderboardBack">К управлению</a>
+                <span aria-hidden="true">·</span>
+                <a href="/" data-i18n="leaderboardHome">На главную</a>
+            </nav>
+        </article>
+    </main>
+
+    <script src="/viewer-i18n.js"></script>
+    <script>
+        const dateSelect = document.getElementById('dateSelect');
+        const leaderboardBody = document.getElementById('leaderboardBody');
+        const t = (key, vars) => (window.viewerI18n ? window.viewerI18n.t(key, vars) : key);
+
+        function formatSolveTimeMs(ms) {
+            if (ms == null || !Number.isFinite(Number(ms))) return '—';
+            const totalSec = Number(ms) / 1000;
+            if (totalSec < 60) return t('secShort', { n: totalSec.toFixed(1) });
+            const m = Math.floor(totalSec / 60);
+            const s = totalSec % 60;
+            return t('minSec', { m, s: s.toFixed(1) });
+        }
+
+        function renderRows(entries) {
+            if (!entries.length) {
+                leaderboardBody.innerHTML =
+                    `<tr><td colspan="4" class="leaderboard-empty">${t('leaderboardEmpty')}</td></tr>`;
+                return;
+            }
+            leaderboardBody.innerHTML = entries.map((entry) => `
+                <tr>
+                    <td class="leaderboard-rank">${entry.rank}</td>
+                    <td class="leaderboard-user">${entry.username}</td>
+                    <td class="leaderboard-time">${formatSolveTimeMs(entry.solve_time_ms)}</td>
+                    <td class="leaderboard-moves">${entry.move_count ?? '—'}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadDates() {
+            const res = await fetch('/api/daily-challenge/dates');
+            const data = await res.json();
+            const dates = data.dates || [];
+            dateSelect.innerHTML = dates.map((date) =>
+                `<option value="${date}">${date}</option>`
+            ).join('');
+            const queryDate = new URLSearchParams(location.search).get('date');
+            if (queryDate && dates.includes(queryDate)) {
+                dateSelect.value = queryDate;
+            }
+        }
+
+        async function loadLeaderboard() {
+            const date = dateSelect.value;
+            leaderboardBody.innerHTML =
+                `<tr><td colspan="4" class="leaderboard-empty">${t('leaderboardLoading')}</td></tr>`;
+            try {
+                const res = await fetch(`/api/daily-challenge/leaderboard?date=${encodeURIComponent(date)}`);
+                const data = await res.json();
+                renderRows(data.entries || []);
+                const url = new URL(location.href);
+                url.searchParams.set('date', date);
+                history.replaceState(null, '', url);
+            } catch (err) {
+                leaderboardBody.innerHTML =
+                    `<tr><td colspan="4" class="leaderboard-empty">${err.message || t('error')}</td></tr>`;
+            }
+        }
+
+        dateSelect.addEventListener('change', loadLeaderboard);
+        window.addEventListener('viewer:langchange', () => {
+            window.viewerI18n?.applyTranslations?.();
+            loadLeaderboard();
+        });
+
+        (async () => {
+            await loadDates();
+            await loadLeaderboard();
+        })();
+    </script>
+</body>
+</html>

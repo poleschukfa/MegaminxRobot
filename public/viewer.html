@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Управление роботом, собирающим мегаминкс | Roborubiks</title>
+    <link rel="stylesheet" href="/viewer.css">
+    <link rel="stylesheet" href="/viewer-ui.css">
+</head>
+<body class="compact-mode">
+    <div class="top-actions">
+        <button type="button" class="logout-btn" id="logoutBtn" hidden data-i18n="authLogout">Выход</button>
+        <div class="lang-switcher" id="langSwitcher" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="ru" aria-pressed="true">RU</button>
+            <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-layout" id="mainLayout">
+            <section class="video-section" data-i18n-aria="videoSectionAria" aria-label="Трансляция и симулятор">
+                <div class="landing-hero" id="welcomeCard">
+                    <div class="landing-hero__glow" aria-hidden="true"></div>
+                    <p class="landing-hero__badge" data-i18n="landingBadge">Онлайн · Roborubiks</p>
+                    <h1 class="landing-hero__title" data-i18n="landingTitle">Управляйте роботом, собирающим мегаминкс, в реальном времени</h1>
+                    <p class="landing-hero__lead" data-i18n="landingLead">Встаньте в очередь, станьте активным зрителем и крутите грани настоящего робота через браузер.</p>
+                    <ol class="landing-steps">
+                        <li class="landing-step">
+                            <span class="landing-step__num">1</span>
+                            <span class="landing-step__text" data-i18n="landingStep1">Нажмите «Встать в очередь»</span>
+                        </li>
+                        <li class="landing-step">
+                            <span class="landing-step__num">2</span>
+                            <span class="landing-step__text" data-i18n="landingStep2">Дождитесь своей очереди</span>
+                        </li>
+                        <li class="landing-step">
+                            <span class="landing-step__num">3</span>
+                            <span class="landing-step__text" data-i18n="landingStep3">Управляйте гранями или отправьте путь</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="auth-shell" id="authShell" hidden>
+                    <section class="auth-panel" id="authPanel" aria-labelledby="authTitle">
+                        <div class="auth-panel__tabs" id="authTabs" role="tablist" aria-label="Auth">
+                            <button type="button" class="auth-panel__tab active" id="authTabLogin" role="tab" aria-selected="true" data-i18n="authTabLogin">Вход</button>
+                            <button type="button" class="auth-panel__tab" id="authTabRegister" role="tab" aria-selected="false" data-i18n="authTabRegister">Регистрация</button>
+                        </div>
+
+                        <header class="auth-panel__head">
+                            <h2 class="auth-panel__title" id="authTitle" data-i18n="authTitle">Вход для управления</h2>
+                            <p class="auth-panel__lead" id="authLead" data-i18n="authLead">Войдите в аккаунт, чтобы встать в очередь и управлять роботом.</p>
+                        </header>
+
+                        <form class="auth-panel__form" id="authForm" aria-labelledby="authTitle" hidden>
+                            <div class="auth-panel__field">
+                                <label class="auth-panel__label" for="authUsername" data-i18n="authUsernameLabel">Логин</label>
+                                <input
+                                    class="auth-panel__input"
+                                    id="authUsername"
+                                    name="username"
+                                    type="text"
+                                    autocomplete="username"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+                                    data-i18n-placeholder="authUsernamePlaceholder"
+                                    placeholder="your_login"
+                                    required
+                                >
+                            </div>
+                            <div class="auth-panel__field">
+                                <label class="auth-panel__label" for="authPassword" data-i18n="authPasswordLabel">Пароль</label>
+                                <input
+                                    class="auth-panel__input"
+                                    id="authPassword"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    data-i18n-placeholder="authPasswordPlaceholder"
+                                    placeholder="Пароль"
+                                    required
+                                >
+                            </div>
+                            <button class="auth-panel__submit" type="submit" id="authSubmitBtn" data-i18n="authSubmit">Войти</button>
+                        </form>
+
+                        <form class="auth-panel__form" id="registerForm" hidden aria-labelledby="authTitle">
+                            <div class="auth-panel__field">
+                                <label class="auth-panel__label" for="registerUsername" data-i18n="authUsernameLabel">Логин</label>
+                                <input
+                                    class="auth-panel__input"
+                                    id="registerUsername"
+                                    name="username"
+                                    type="text"
+                                    autocomplete="username"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+                                    data-i18n-placeholder="authUsernamePlaceholder"
+                                    placeholder="your_login"
+                                    required
+                                >
+                                <p class="auth-panel__hint" data-i18n="authUsernameHint">3–32 символа: латиница, цифры и _</p>
+                            </div>
+                            <div class="auth-panel__field">
+                                <label class="auth-panel__label" for="registerPassword" data-i18n="authPasswordLabel">Пароль</label>
+                                <input
+                                    class="auth-panel__input"
+                                    id="registerPassword"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    data-i18n-placeholder="authRegisterPasswordPlaceholder"
+                                    placeholder="Минимум 8 символов"
+                                    minlength="8"
+                                    required
+                                >
+                            </div>
+                            <button class="auth-panel__submit" type="submit" data-i18n="authRegisterSubmit">Создать аккаунт</button>
+                        </form>
+
+                        <div class="auth-panel__feedback">
+                            <p class="auth-panel__success" id="authSuccess" hidden role="status"></p>
+                            <p class="auth-panel__error" id="authError" hidden role="alert"></p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="controls landing-controls" id="landingControls">
+                    <button class="btn-primary btn-join" id="joinBtn" data-i18n="joinBtn">Встать в очередь</button>
+                    <button class="btn-danger btn-leave" id="leaveBtn" style="display: none;" data-i18n="leaveBtn">Покинуть очередь</button>
+                </div>
+
+                <a class="landing-api-link" href="/notebooks/view.html" target="_blank" rel="noopener noreferrer" data-i18n="landingApiLink">Документация API</a>
+
+                <div class="queue-info" id="queueInfo" role="status" aria-live="polite">
+                    <div class="viewer-spinner viewer-spinner--on-dark" aria-hidden="true"></div>
+                    <div class="queue-position" id="queuePosition">—</div>
+                    <div class="queue-label" data-i18n="queueLabel">ваша позиция в очереди</div>
+                    <div class="queue-message" id="queueMessage" data-i18n="queueMessageDefault">Подключаемся…</div>
+                </div>
+
+                <div class="connect-panel" id="connectPanel" role="status" aria-live="polite">
+                    <div class="viewer-spinner viewer-spinner--on-dark" aria-hidden="true"></div>
+                    <p class="connect-panel__title" data-i18n="connectingTitle">Подключение к роботу</p>
+                    <p class="connect-panel__hint" data-i18n="connectingHint">Настраиваем видео и пульт управления…</p>
+                </div>
+
+                <div class="media-stack" id="mediaStack">
+                    <div class="video-container">
+                        <span class="video-label" data-i18n="videoLabel">Трансляция</span>
+                        <div class="media-placeholder" id="videoPlaceholder">
+                            <span data-i18n="videoPlaceholder">Видео появится, когда вы станете активным зрителем</span>
+                        </div>
+                        <video id="remoteVideo" autoplay playsinline></video>
+                    </div>
+
+                    <div class="simulator-section" id="simulatorSection">
+                        <div class="simulator-container">
+                            <span class="video-label" data-i18n="simulatorLabel">Симулятор</span>
+                            <iframe
+                                id="simulatorFrame"
+                                title="MegaMinx Simulator"
+                                loading="lazy"
+                                allow="fullscreen"
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sponsors-section sponsors-section--mini landing-sponsors">
+                    <img src="/assets/sponsor-1.png"
+                         alt="Sponsor" class="sponsor-logo" loading="lazy">
+                    <a href="/thanks-sponsor-2.html" target="_blank" rel="noopener noreferrer" aria-label="Благодарность второму спонсору">
+                        <img src="/assets/sponsor-2.png"
+                             alt="Sponsor" class="sponsor-logo" loading="lazy">
+                    </a>
+                </div>
+                <div class="footer-note">
+                    <a href="https://roborubiks.ru" target="_blank" rel="noopener noreferrer">roborubiks.ru</a>
+                </div>
+            </section>
+
+            <aside class="control-section" id="controlPanel" style="display: none;" data-i18n-aria="controlPanelAria" aria-label="Пульт управления">
+                <nav class="tabs" role="tablist">
+                    <button class="tab active" type="button" role="tab" data-tab="control" aria-selected="true" data-i18n="tabControl">Управление</button>
+                    <button class="tab" type="button" role="tab" data-tab="api" aria-selected="false" data-i18n="tabApi">API</button>
+                </nav>
+
+                <div class="tab-content active" id="tab-control" role="tabpanel">
+                    <div class="control-grid" id="controlGrid">
+                        <div class="control-main">
+                            <div class="card-panel daily-challenge-panel" id="dailyChallengePanel">
+                                <h3 class="panel-title" data-i18n="dailyChallengeTitle">Дейли-челлендж</h3>
+                                <p class="section-hint" data-i18n="dailyChallengeHint">Каждый день новый путь. Робот перемешает из начала — отправьте решение.</p>
+                                <p class="daily-challenge__date" id="dailyChallengeDate" hidden></p>
+                                <p class="daily-challenge__scramble" id="dailyChallengeScramble" hidden></p>
+                                <div class="daily-challenge__actions">
+                                    <button class="btn-primary btn-block" id="dailyChallengeStartBtn" type="button" data-i18n="dailyChallengeStart">Начать челлендж</button>
+                                    <a class="daily-challenge__leaderboard-link" href="/leaderboard.html" data-i18n="dailyChallengeLeaderboard">Таблица лидеров</a>
+                                </div>
+                                <div class="daily-challenge__solution" id="dailyChallengeSolution" hidden>
+                                    <label class="daily-challenge__label" for="dailySolutionInput" data-i18n="dailyChallengeSolutionLabel">Ваше решение</label>
+                                    <input type="text" class="path-input" id="dailySolutionInput" placeholder="U'.F.R..." value="" autocomplete="off" spellcheck="false">
+                                    <button class="btn-success btn-block" id="dailyChallengeSubmitBtn" type="button" data-i18n="dailyChallengeSubmit">Отправить решение</button>
+                                    <p class="daily-challenge__result" id="dailyChallengeResult" hidden role="status"></p>
+                                </div>
+                            </div>
+
+                            <div class="card-panel quick-actions">
+                                <h3 class="panel-title" data-i18n="quickActions">Быстрые действия</h3>
+                                <div class="quick-actions-grid">
+                                    <button class="btn-danger btn-action" id="motorTestBtn" type="button">
+                                        <span class="btn-action-text" data-i18n="motorTest">Тест моторов</span>
+                                    </button>
+                                    <button class="btn-success btn-action" id="solveBtn" type="button">
+                                        <span class="btn-action-text" data-i18n="solve">Решить</span>
+                                    </button>
+                                </div>
+                                <div id="solveOut" class="solve-out" aria-live="polite"></div>
+                            </div>
+
+                            <div class="card-panel card-panel--faces">
+                                <h3 class="section-title" data-i18n="tabControl">Управление</h3>
+                                <div class="faces-grid" id="facesGrid"></div>
+                            </div>
+
+                            <div class="card-panel path-section">
+                                <h3 class="section-title" data-i18n="pathTitle">Путь (нотация)</h3>
+                                <p class="section-hint" data-i18n-html="pathHint">Пример: <code>U.F.R'.BL</code></p>
+                                <input type="text" class="path-input" id="pathInput" placeholder="U.F.R'.BL" value="" autocomplete="off" spellcheck="false">
+                                <div class="button-group">
+                                    <button class="btn-success btn-block" id="executePathBtn" type="button" data-i18n="executePath">Выполнить путь</button>
+                                </div>
+                                <div class="path-timing" id="executePathTiming" hidden></div>
+                                <div class="button-group button-group--split">
+                                    <button class="btn-danger" id="goToInitBtn" type="button" data-i18n="goToInit">Собрать обратно</button>
+                                    <button class="btn-primary" id="getStateBtn" type="button" data-i18n="getState">Состояние</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-side">
+                            <div class="card-panel history-section">
+                                <h3 class="section-title" data-i18n="historyTitle">История</h3>
+                                <div class="button-group button-group--split">
+                                    <button class="btn-primary btn-sm" id="getHistoryBtn" type="button" data-i18n="refreshHistory">Обновить</button>
+                                    <button class="btn-warning btn-sm" id="copyPathBtn" type="button" data-i18n="copyPath">Копировать</button>
+                                </div>
+                                <div class="history-list empty-state" id="historyList" data-i18n="historyEmpty">Пока нет ходов — крутите грани или выполните путь</div>
+                            </div>
+
+                            <div class="card-panel response-section">
+                                <h3 class="section-title" data-i18n="logTitle">Журнал событий</h3>
+                                <div class="response-log empty-state" id="responseLog" data-i18n="logEmpty">Команды и ответы робота — здесь</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-api" role="tabpanel">
+                    <div class="card-panel api-token-panel" id="apiTokenPanel" hidden>
+                        <h3 class="panel-title" data-i18n="apiTokenTitle">Токен для API</h3>
+                        <p class="section-hint" data-i18n="apiTokenHint">
+                            Скопируйте токен сессии для запросов из Python или curl. Работает, пока вы вошли в аккаунт. Для команд робота нужен активный зритель в очереди.
+                        </p>
+                        <div class="api-token-row">
+                            <input
+                                type="password"
+                                class="path-input api-token-input"
+                                id="apiTokenField"
+                                readonly
+                                autocomplete="off"
+                                spellcheck="false"
+                                aria-label="API token"
+                            >
+                            <button type="button" class="btn-primary btn-sm" id="apiTokenRevealBtn" data-i18n="apiTokenReveal">Показать</button>
+                            <button type="button" class="btn-warning btn-sm" id="apiTokenCopyBtn" data-i18n="copyPath">Копировать</button>
+                        </div>
+                        <pre class="api-token-example" id="apiTokenExample" aria-label="Authorization header"></pre>
+                    </div>
+                    <div class="card-panel api-token-panel api-token-panel--muted" id="apiTokenNoAuth" hidden>
+                        <p class="section-hint" data-i18n="apiTokenNoAuth">Авторизация отключена — HTTP API доступен без токена (или используйте серверный API_SECRET).</p>
+                    </div>
+                    <div class="card-panel api-promo">
+                        <h3 class="panel-title" data-i18n="apiTitle">Python API</h3>
+                        <p class="api-promo-text" data-i18n-html="apiText">
+                            Управляйте роботом из Jupyter или скриптов — класс <code>MegaminxClient</code>.
+                        </p>
+                        <div class="api-notebook-links">
+                            <a class="api-notebook-link api-notebook-link--primary" href="/notebooks/view.html" target="_blank" rel="noopener noreferrer" data-i18n="apiDocs">
+                                Документация API
+                            </a>
+                            <a class="api-notebook-link" href="/notebooks/megaminx_api.ipynb" target="_blank" rel="noopener noreferrer" download data-i18n="apiNotebook">
+                                Jupyter notebook
+                            </a>
+                            <a class="api-notebook-link" href="/notebooks/megaminx_client.py" target="_blank" rel="noopener noreferrer" download data-i18n="apiClient">
+                                megaminx_client.py
+                            </a>
+                            <a class="api-notebook-link api-notebook-link--colab" href="https://colab.research.google.com/github/poleschukfa/MegaminxRobot/blob/main/notebooks/megaminx_api.ipynb" target="_blank" rel="noopener noreferrer" data-i18n-title="apiColab">
+                                <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="" width="140" height="32">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-config" role="tabpanel">
+                    <div class="card-panel api-docs">
+                        <div class="api-section">
+                            <div class="api-title" data-i18n="configTitle">Конфигурация граней</div>
+                            <div class="api-note" data-i18n-html="configNote">
+                                Измените <code>faceConfig</code> в <code>viewer-config.js</code> и обновите страницу.
+                            </div>
+                            <div class="config-panel">
+                                <div class="config-title" data-i18n="configCurrent">Текущая конфигурация:</div>
+                                <div class="config-code" id="configDisplay"></div>
+                            </div>
+                            <div class="code-block" id="configExample" data-i18n="configExample">// см. viewer-config.js</div>
+                            <button class="copy-btn" type="button" onclick="copyCode('configExample')" data-i18n="copyCode">Копировать</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/viewer-i18n.js"></script>
+    <script src="/viewer-config.js"></script>
+    <script src="/viewer-app.js"></script>
+</body>
+</html>

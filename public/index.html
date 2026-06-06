@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Roborubiks — управление роботом, собирающим мегаминкс</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body class="index-page">
+    <div class="lang-switcher" id="langSwitcher" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="true">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+
+    <main class="index-shell">
+        <article class="index-card">
+            <header class="index-hero">
+                <h1 class="index-hero__title" data-i18n="indexTitle">Создание робота для сборки головоломки Мегаминкс</h1>
+                <p class="index-hero__lead" data-i18n="indexLead">
+                    Проект МФТИ: робот для сборки мегаминкса, онлайн-симулятор и соревнование алгоритмов.
+                </p>
+            </header>
+
+            <section class="index-action" aria-labelledby="indexActionLabel">
+                <h2 class="visually-hidden" id="indexActionLabel" data-i18n="indexJoinBtn">Управление роботом</h2>
+
+                <div class="index-status is-loading" id="statusPanel" role="status" aria-live="polite">
+                    <div class="index-status__loading">
+                        <span class="viewer-spinner" aria-hidden="true"></span>
+                        <span data-i18n="indexChecking">Проверяем статус робота…</span>
+                    </div>
+                    <div class="index-status__content">
+                        <div class="index-status__main">
+                            <span class="status-dot" id="statusDot" aria-hidden="true"></span>
+                            <span class="index-status__label" id="statusText">—</span>
+                            <span id="statusBadge" class="status-badge"></span>
+                        </div>
+                        <p class="index-status__queue" id="queueLine">В очереди: 0</p>
+                    </div>
+                </div>
+
+                <a class="index-join" id="joinLink" href="/viewer.html" data-i18n="indexJoinBtn">Перейти к управлению роботом</a>
+                <a class="index-leaderboard" href="/leaderboard.html" data-i18n="dailyChallengeLeaderboard">Таблица лидеров</a>
+            </section>
+
+            <section class="index-about">
+                <figure class="index-about__media">
+                    <img
+                        class="index-about__img"
+                        src="/assets/megaminx-main.png"
+                        alt=""
+                        data-i18n-alt="indexMegaminxAlt"
+                        loading="lazy"
+                        width="480"
+                        height="360"
+                    >
+                </figure>
+                <div class="index-about__body">
+                    <h2 class="index-section-title" data-i18n="indexAboutTitle">О проекте</h2>
+                    <p data-i18n="indexAboutText">
+                        Открытая платформа для наблюдения за роботом, тестирования алгоритмов и удалённого управления сборкой.
+                    </p>
+                    <p data-i18n="indexAboutGoal">
+                        Команда объединяет инженеров, математиков и разработчиков, чтобы ускорить роботическую сборку и подготовить попытку мирового рекорда.
+                    </p>
+                </div>
+            </section>
+
+            <section class="index-steps-block">
+                <h2 class="index-section-title" data-i18n="indexHowTitle">Как принять участие</h2>
+                <ol class="index-steps__list">
+                    <li data-i18n="indexHow1">Встаньте в очередь на управление.</li>
+                    <li data-i18n="indexHow2">Когда подойдёт очередь — откроются видео и пульт.</li>
+                    <li data-i18n="indexHow3">Крутите грани или отправьте путь в нотации.</li>
+                    <li data-i18n="indexHow4">Сравнивайте решения и готовьтесь к хакатону.</li>
+                </ol>
+            </section>
+
+            <footer class="index-footer">
+                <nav class="index-links" aria-label="Links">
+                    <a href="https://fund.mipt.ru/upload/iblock/4a9/j535otsic2ql6023xtvbaov4mf3vjpw4.pdf" target="_blank" rel="noopener noreferrer" data-i18n="indexLinkPresentation">Презентация проекта</a>
+                    <span class="index-links__sep" aria-hidden="true">·</span>
+                    <a href="/thanks-sponsor-2.html" target="_blank" rel="noopener noreferrer" data-i18n="indexLinkThanks">Благодарность Фонду МФТИ</a>
+                </nav>
+
+                <div class="index-sponsors">
+                    <span class="index-sponsors__label" data-i18n="indexSponsorsTitle">Партнёры</span>
+                    <div class="index-sponsors__logos">
+                        <img src="/assets/sponsor-1.png" alt="Starkit" class="index-sponsors__logo" loading="lazy">
+                        <a href="/thanks-sponsor-2.html" class="index-sponsors__link">
+                            <img src="/assets/sponsor-2.png" alt="Фонд целевого капитала МФТИ" class="index-sponsors__logo" loading="lazy">
+                        </a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <script src="/viewer-i18n.js"></script>
+    <script>
+        const statusPanel = document.getElementById('statusPanel');
+        const statusText = document.getElementById('statusText');
+        const statusBadge = document.getElementById('statusBadge');
+        const statusDot = document.getElementById('statusDot');
+        const joinLink = document.getElementById('joinLink');
+        const queueLine = document.getElementById('queueLine');
+
+        function updateJoinLink() {
+            if (joinLink && window.viewerI18n) {
+                joinLink.href = window.viewerI18n.viewerHref();
+            }
+        }
+
+        function renderQueueCount(n) {
+            if (!queueLine || !window.viewerI18n) return;
+            queueLine.textContent = window.viewerI18n.t('indexQueueCount', { n });
+        }
+
+        function setOnlineState(online) {
+            statusPanel.classList.toggle('is-online', online);
+            statusPanel.classList.toggle('is-offline', !online);
+            if (statusDot) {
+                statusDot.classList.toggle('is-online', online);
+                statusDot.classList.toggle('is-offline', !online);
+            }
+        }
+
+        function renderStatus(data) {
+            statusPanel.classList.remove('is-loading');
+            const t = (key) => window.viewerI18n?.t(key) || key;
+
+            if (data.broadcaster) {
+                statusText.textContent = t('indexRobotOnline');
+                statusBadge.textContent = 'ONLINE';
+                statusBadge.className = 'status-badge online';
+                setOnlineState(true);
+            } else {
+                statusText.textContent = t('indexRobotOffline');
+                statusBadge.textContent = 'OFFLINE';
+                statusBadge.className = 'status-badge offline';
+                setOnlineState(false);
+            }
+
+            renderQueueCount(data.queueLength || 0);
+        }
+
+        async function checkStatus() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                renderStatus(data);
+            } catch (err) {
+                console.error('Status check failed:', err);
+                statusPanel.classList.remove('is-loading');
+                statusText.textContent = '—';
+                statusBadge.textContent = '—';
+                statusBadge.className = 'status-badge';
+                setOnlineState(false);
+            }
+        }
+
+        updateJoinLink();
+        window.addEventListener('viewer:langchange', () => {
+            updateJoinLink();
+            checkStatus();
+        });
+
+        checkStatus();
+        setInterval(checkStatus, 5000);
+    </script>
+</body>
+</html>

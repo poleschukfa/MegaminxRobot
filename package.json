@@ -1,0 +1,17 @@
+{
+  "name": "webrtc-queue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:simulator": "npm run build --prefix MegaMinx && node scripts/sync-simulator-to-public.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
